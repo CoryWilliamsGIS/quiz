@@ -69,43 +69,36 @@ crossorigin=""></script>
   </head>
   </head>
   <body>
-
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Quiz</span>
           <div class="mdl-layout-spacer"></div>
-
-
- 
+	
         </div>
       </header>
       <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-      <!--    <img src="images/user.jpg" class="demo-avatar"> -->
-          <div class="demo-avatar-dropdown">
+
+          <div class="demo-avatar-dropdown"> 
             <span>Quiz Menu</span>
             <div class="mdl-layout-spacer"></div>
- 
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-             <li class="mdl-menu__item">Quiz Menu</li> 
-            </ul> 
+
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
           <a class="mdl-navigation__link" href=""onclick='trackLocation();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Track Location</a>
-		  <a class="mdl-navigation__link" href=""onclick='getQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Get Questions</a>
+		     <a class="mdl-navigation__link" href=""onclick='getQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Get Questions</a>
           <a class="mdl-navigation__link" href=""onclick='availableQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">add_location</i>Answer Questions</a>
-          
+       
         </nav>
       </div>
-
-	  
-
 	  
      <main class="mdl-layout__content mdl-color--grey-100">
 	 <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"> 
 		<div id="mapid" style="width: 100%; height: 100%;"></div> 
+		<!-- try removing the width and height from the above div code.. the 100% height and width be classified by the css (black writing) at the top of the document..
+		see this url for more detail: http://www.d3noob.org/2014/02/make-your-leafletjs-map-full-screen.html -->
 
     <div id="questionDiv" style ="display:none">
         <h3 id = "questionHeader"> Please answer the question below:</h3>
@@ -126,6 +119,8 @@ crossorigin=""></script>
 
         <button id="submitButton" onclick ="validateData()">Submit Answer</button></div>
     </div>
+<!--	 <div id="answerUploadResult"></div> -->
+		   
 	
 </main>
 
