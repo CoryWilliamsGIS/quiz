@@ -46,35 +46,33 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.amber-orange.min.css" />
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.amber-orange.min.css" /> 
     <link rel="stylesheet" href="styles.css">
 
 	<!-- the following links add the CSS and Javascript required for the Leaflet Map -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
-integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
-crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
-integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
-crossorigin=""></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+	integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+	crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+	integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
+	crossorigin=""></script>
 
-<!-- the following links incorporate the CSS required for custom icon creation -->
-<link rel="stylesheet" href=" ionicons.min.css">
-<link rel="stylesheet" href="leaflet.awesome-markers.css">
-<script src="leaflet.awesome-markers.js"></script>
-<!-- the following CSS is used to set the size of the Map -->
-<style type="text/css">
-#mapid { height: 100%;
-		width: 100%; }
+	<!-- the following links incorporate the CSS required for custom icon creation -->
+	<link rel="stylesheet" href=" ionicons.min.css">
+	<link rel="stylesheet" href="leaflet.awesome-markers.css">
+	<script src="leaflet.awesome-markers.js"></script>
+	<!-- the following CSS is used to set the size of the Map -->
+	<style type="text/css">
+	#mapid { height: 100%;
+	width: 100%; }
 </style>
-  </head>
-  </head>
+</head>
   <body>
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Quiz</span>
           <div class="mdl-layout-spacer"></div>
-	
         </div>
       </header>
       <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
@@ -83,22 +81,19 @@ crossorigin=""></script>
           <div class="demo-avatar-dropdown"> 
             <span>Quiz Menu</span>
             <div class="mdl-layout-spacer"></div>
-
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href=""onclick='trackLocation();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Track Location</a>
+          <a class="mdl-navigation__link" href=""onclick='trackLocation();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">flag</i>Track Location</a>
 		     <a class="mdl-navigation__link" href=""onclick='getQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Get Questions</a>
-          <a class="mdl-navigation__link" href=""onclick='availableQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">add_location</i>Answer Questions</a>
-       
+          <a class="mdl-navigation__link" href=""onclick='availableQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Answer Questions</a>
         </nav>
       </div>
 	  
      <main class="mdl-layout__content mdl-color--grey-100">
 	 <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"> 
 		<div id="mapid" style="width: 100%; height: 100%;"></div> 
-		<!-- try removing the width and height from the above div code.. the 100% height and width be classified by the css (black writing) at the top of the document..
-		see this url for more detail: http://www.d3noob.org/2014/02/make-your-leafletjs-map-full-screen.html -->
+
 
     <div id="questionDiv" style ="display:none">
         <h3 id = "questionHeader"> Please answer the question below:</h3>
@@ -119,13 +114,10 @@ crossorigin=""></script>
 
         <button id="submitButton" onclick ="validateData()">Submit Answer</button></div>
     </div>
+	</main>
 
-		   
-	
-</main>
-
-  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+	<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 	<script src="js/appActivity.js"></script>
 
- </body>
+</body>
 </html>
