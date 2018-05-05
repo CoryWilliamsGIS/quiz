@@ -39,14 +39,15 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	
 	
 
-/* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
-&
+/* Code Adapted from:
+https://www.w3schools.com/html/html5_geolocation.asp
+https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
 https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet */
 
 // Track the location of the user
 var initialTracking = true;
 var userLocation;
-var userLocationRadius; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+var userLocationRadius; 
 var autoPan = false;
 
 function trackLocation() {
@@ -66,13 +67,14 @@ function trackLocation() {
 }
 
 // Display user position as pink marker
+// Display a 20m circle around the pink marker
 // Center map on user
 function showPosition(position) {
 	if(!initialTracking){
 		mymap.removeLayer(userLocation);
-		mymap.removeLayer(userLocationRadius); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		mymap.removeLayer(userLocationRadius); 
 	}
-	var radius = 20; //!!!!!!!!!
+	var radius = 20; 
 	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);		
 	userLocationRadius = L.circle([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);			//!!!!!!!!!!!!!			
 	if(initialTracking){
