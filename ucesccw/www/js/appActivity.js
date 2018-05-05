@@ -164,11 +164,11 @@ function loadQuestionLayer(questionData) {
 	mymap.fitBounds(questionsLayer.getBounds());
 }
 
-/*
+
 function availableQuestions(){
 	checkQuestionDistance(qMarkers);
 }
-*/
+
 
 function checkQuestionDistance(questionMarkers){
 	
