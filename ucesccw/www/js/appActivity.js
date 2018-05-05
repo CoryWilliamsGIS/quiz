@@ -6,7 +6,6 @@
 var mymap = L.map('mapid').fitWorld();
 
 
-    var mymap = L.map('mapid').fitWorld();
 
     // load the tiles
 
