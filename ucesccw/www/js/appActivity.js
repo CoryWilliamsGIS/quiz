@@ -271,6 +271,24 @@ function showClickedQuestion(clickedQuestion) {
 }
 
 
+function validateData() {
+        var a=document.getElementById("check1").checked;
+        var b=document.getElementById("check2").checked;
+        var c=document.getElementById("check3").checked;
+        var d=document.getElementById("check4").checked; 
+
+        if (a==false && b==false && c==false && d==false)
+        {
+            alert("Please fill in all fields.");
+           return false; //this commented out works but the then next question is auto checked........... sort out
+        }
+        else 
+        {
+	              
+        	startDataUpload()
+        }
+}
+
 var answerTrue;
 function startDataUpload() {
 	alert ("Submitting your answer!");
