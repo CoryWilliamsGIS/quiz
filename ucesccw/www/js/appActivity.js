@@ -37,7 +37,7 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	markerColor: 'blue'
 });
 	
-//var client;	
+	
 
 /* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
 &
@@ -184,17 +184,13 @@ function checkQuestionDistance(questionMarkers){
 	}
 }	
 
-
-
 // Create a global variable for the clicked marker
 var clickedMarker;
-
 
 function onClick(e) {
 	showClickedQuestion(this);
 	clickedMarker = this;
 }
-
 
 function showClickedQuestion(clickedQuestion) {
 	// AJAX alternative
@@ -293,19 +289,17 @@ function answerUploaded() {
   // Wait until data is ready - i.e. readyState is 4
   if (client.readyState == 4) {
     // Once the data is ready, process the data
-	
 	// AJAX Alternative 
 	// Switch the div back to leaflet map
 	document.getElementById('questionDiv').style.display = 'none';
 	document.getElementById('mapid').style.display = 'block';
-	/* If user answer is correct - make question marker green,
-	if user answer incorrect - make question marker red */
-	if (answerTrue) {
-		clickedMarker.setIcon(testMarkerGreen);
-	} else {
-		clickedMarker.setIcon(testMarkerRed);
-	}
-	
+		/* If user answer is correct - make question marker green,
+		if user answer incorrect - make question marker red */
+		if (answerTrue) {
+			clickedMarker.setIcon(testMarkerGreen);
+		} else {
+			clickedMarker.setIcon(testMarkerRed);
+		}
     }
 }
 
