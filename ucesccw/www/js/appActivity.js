@@ -271,6 +271,79 @@ function showClickedQuestion(clickedQuestion) {
 }
 
 
+var answerTrue;
+function startDataUpload() {
+	alert ("Submitting your answer!");
 
+//	var location_name = document.getElementById("location_name").value;
+
+	var cAnswer = clickedMarker.feature.properties.answer_correct;
+	var question = document.getElementById("question").value;
+
+//	var answer_1 = document.getElementById("answer_1").value;
+//	var answer_2 = document.getElementById("answer_2").value;
+//	var answer_3 = document.getElementById("answer_3").value;
+//	var answer_4 = document.getElementById("answer_4").value;
+
+//	var lat = document.getElementById("lat").value;
+//	var lng = document.getElementById("lng").value;
+
+//	alert(Your chosen answer is );
+	var answer;
+	var postString = "question="+question; //= "answer="+answer;
+//var postString = "location_name="+location_name +"&question="+question +"&answer_1="+answer_1 +"&answer_2="+answer_2 +"&answer_3="+answer_3+ "&answer_4="+answer_4;
+	// now get the radio button values
+	if (document.getElementById("check1").checked) {
+		answer = 1;
+        postString=postString+"&answer="+answer;
+    }
+    if (document.getElementById("check2").checked) {
+		answer = 2;
+    	postString=postString+"&answer="+answer;
+    }
+	if (document.getElementById("check3").checked) {
+		answer =3;
+		postString=postString+"&answer="+answer;
+	}
+	if (document.getElementById("check4").checked) {
+		answer =4;
+		postString=postString+"&answer="+answer;
+	}
+	if (answer == cAnswer) {
+		alert("Correct!");
+		answerTrue = true;
+	} else {
+		alert("Sorry, that is incorrect! \n The correct answer is: " + cAnswer);
+		answerTrue = false;
+	}
+		
+	postString = postString + "&cAnswer="+cAnswer;
+	//postString = postString + "&lat=" + lat + "&lng=" + lng;
+
+	//alert ("Your chosen answer is: "+answer);
+	//alert 
+
+	processData(postString);
+}
+
+var client;
+
+function processData(postString) {
+   client = new XMLHttpRequest();
+   client.open('POST','http://developer.cege.ucl.ac.uk:30289/uploadAnswer',true);
+   client.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   client.onreadystatechange = answerUploaded;  
+   client.send(postString);
+}
+
+// create the code to wait for the response from the data server, and process the response once it is received
+function answerUploaded() {
+  // this function listens out for the server to say that the data is ready - i.e. has state 4
+  if (client.readyState == 4) {
+    // change the DIV to show the response
+ //   document.getElementById("answerUploadResult").innerHTML = client.responseText;
+	document.getElementById('questionDiv').style.display = 'none';
+	document.getElementById('mapid').style.display = 'block';
+ 
 
 
