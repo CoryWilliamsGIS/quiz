@@ -37,7 +37,7 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	markerColor: 'blue'
 });
 	
-//var client;	- test
+var client;	
 
 /* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
 &
