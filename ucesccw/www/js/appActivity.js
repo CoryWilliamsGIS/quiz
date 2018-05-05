@@ -23,7 +23,15 @@
 	
 	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
 	
+	var earthquakelayer;
 
+	// create the code to get the Earthquakes data using an XMLHttpRequest
+	function getEarthquakes() {
+	client = new XMLHttpRequest();
+	client.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
+	client.onreadystatechange = earthquakeResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+	client.send();
+}
 
 	// create custom red marker
 	var testMarkerRed = L.AwesomeMarkers.icon({
@@ -37,16 +45,50 @@
 	markerColor: 'pink'
 });
 	// create the code to wait for the response from the data server, and process the response once it is received
+	
+	function earthquakeResponse() {
+	
+	// this function listens out for the server to say that the data is ready - i.e. has state 4
+	
+	if (client.readyState == 4) {
+	// once the data is ready, process the data
+	
+	var earthquakedata = client.responseText;
+	loadEarthquakelayer(earthquakedata);
+}
+}
+
+	// convert the received data - which is text - to JSON format and add it to the map
+	function loadEarthquakelayer(earthquakedata) {
+	
+	// convert the text to JSON
+	var earthquakejson = JSON.parse(earthquakedata);
+	
+	// load the geoJSON layer
+	var earthquakelayer = L.geoJson(earthquakejson,
+{
+	// use point to layer to create the points
+	pointToLayer: function (feature, latlng)
+{
+	// look at the GeoJSON file - specifically at the properties - to see the earthquake magnitude and use a different marker depending on this value
+	// also include a pop-up that shows the place value of the earthquakes
+	if (feature.properties.mag > 1.75) {
+	return L.marker(latlng, {icon:testMarkerRed}).bindPopup("<b>"+feature.properties.place +"</b>");
+}
+	else {
+	// magnitude is 1.75 or less
+	return L.marker(latlng, {icon:testMarkerPink}).bindPopup("<b>"+feature.properties.place +"</b>");;
+}
+},
+}).addTo(mymap);
+	
+	// change the map zoom so that all the data is shown
+	mymap.fitBounds(earthquakelayer.getBounds());
+}
 
 
-
-
-/* Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
-&
-https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet */
-
-
-
+//adapted from: https://www.w3schools.com/html/html5_geolocation.asp
+//adapted from: https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
 //Tracking location
 
 
@@ -217,10 +259,9 @@ function checkQuestionDistance(questionMarkers){
         }
 	}
 }	
-/*Adapted from:
-https://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript 
-&
-https://www.geodatasource.com/developers/javascript */
+
+	
+
 
 function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
@@ -241,6 +282,8 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
+
+
 var clickedMarker;
 
 function onClick(e) {
@@ -256,6 +299,7 @@ function showClickedQuestion(clickedQuestion) {
 
 	document.getElementById('questionDiv').style.display = 'block';
 	document.getElementById('mapid').style.display = 'none';
+//CHANGING THIS FROM clickedQuestion to clickedMarker -trial to fix error
 	document.getElementById("question").value = clickedQuestion.feature.properties.question;
 	document.getElementById("answer_1").value = clickedQuestion.feature.properties.answer_1;
 	document.getElementById("answer_2").value = clickedQuestion.feature.properties.answer_2;
@@ -271,6 +315,8 @@ function showClickedQuestion(clickedQuestion) {
 }
 
 
+
+
 function validateData() {
         var a=document.getElementById("check1").checked;
         var b=document.getElementById("check2").checked;
@@ -280,9 +326,10 @@ function validateData() {
         if (a==false && b==false && c==false && d==false)
         {
             alert("Please fill in all fields.");
-           return false; //this commented out works but the then next question is auto checked........... sort out
+           return false;
         }
         else 
+
         {
 	              
         	startDataUpload()
@@ -308,8 +355,8 @@ function startDataUpload() {
 
 
 	var answer;
-	var postString = "question="+question; //= "answer="+answer;
-//var postString = "location_name="+location_name +"&question="+question +"&answer_1="+answer_1 +"&answer_2="+answer_2 +"&answer_3="+answer_3+ "&answer_4="+answer_4;
+	var postString = "question="+question; 
+
 	// now get the radio button values
 	if (document.getElementById("check1").checked) {
 		answer = 1;
@@ -338,8 +385,6 @@ function startDataUpload() {
 	postString = postString + "&cAnswer="+cAnswer;
 
 
-
-
 	processData(postString);
 }
 
@@ -358,17 +403,18 @@ function answerUploaded() {
   // this function listens out for the server to say that the data is ready - i.e. has state 4
   if (client.readyState == 4) {
     // change the DIV to show the response
- //   document.getElementById("answerUploadResult").innerHTML = client.responseText;
+
 	document.getElementById('questionDiv').style.display = 'none';
 	document.getElementById('mapid').style.display = 'block';
 	
-		if (answerTrue) {
+	if (answerTrue) {
 		clickedMarker.setIcon(testMarkerGreen);
 	} else {
 		clickedMarker.setIcon(testMarkerRed);
 	}
 	
     }
-  }
+}
+
 
 
