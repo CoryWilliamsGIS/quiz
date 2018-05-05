@@ -46,6 +46,7 @@ https://gis.stackexchange.com/questions/182068/getting-current-user-location-aut
 // Track the location of the user
 var initialTracking = true;
 var userLocation;
+var userLocationRadius; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 var autoPan = false;
 
 function trackLocation() {
@@ -69,8 +70,11 @@ function trackLocation() {
 function showPosition(position) {
 	if(!initialTracking){
 		mymap.removeLayer(userLocation);
+		mymap.removeLayer(userLocationRadius); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
-	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);						
+	var radius = 20; //!!!!!!!!!
+	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);		
+	userLocation = L.marker([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);			//!!!!!!!!!!!!!			
 	if(initialTracking){
 		initialTracking = false;
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
