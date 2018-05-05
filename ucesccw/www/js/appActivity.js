@@ -306,7 +306,7 @@ function startDataUpload() {
 //	var lat = document.getElementById("lat").value;
 //	var lng = document.getElementById("lng").value;
 
-//	alert(Your chosen answer is );
+
 	var answer;
 	var postString = "question="+question; //= "answer="+answer;
 //var postString = "location_name="+location_name +"&question="+question +"&answer_1="+answer_1 +"&answer_2="+answer_2 +"&answer_3="+answer_3+ "&answer_4="+answer_4;
@@ -336,10 +336,9 @@ function startDataUpload() {
 	}
 		
 	postString = postString + "&cAnswer="+cAnswer;
-	//postString = postString + "&lat=" + lat + "&lng=" + lng;
 
-	//alert ("Your chosen answer is: "+answer);
-	//alert 
+
+
 
 	processData(postString);
 }
