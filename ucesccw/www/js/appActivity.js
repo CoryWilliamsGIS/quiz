@@ -1,98 +1,264 @@
 // Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
+    // load the map
 
-var client;
+    var mymap = L.map('mapid').fitWorld();
 
-var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    // load the tiles
 
-// Create global marker variables
-var testMarkerDRed = L.AwesomeMarkers.icon({ 
-	icon: 'play',
-	markerColor: 'darkred'
-	});
+    L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
+
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+
+      maxZoom: 18,
+
+      id: 'mapbox.streets'
+	  
+	 }).addTo(mymap);
+	 
+	 mymap.locate({setView: true, maxZoom: 18});
+
+	// create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable 
 	
-var testMarkerRed = L.AwesomeMarkers.icon({ 
+	var client;
+	
+	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
+	
+	var earthquakelayer;
+
+	// create the code to get the Earthquakes data using an XMLHttpRequest
+	function getEarthquakes() {
+	client = new XMLHttpRequest();
+	client.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
+	client.onreadystatechange = earthquakeResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+	client.send();
+}
+
+	// create custom red marker
+	var testMarkerRed = L.AwesomeMarkers.icon({
 	icon: 'play',
 	markerColor: 'red'
-	});
-	
-var testMarkerGreen = L.AwesomeMarkers.icon({
-	icon: 'play',
-	markerColor: 'darkgreen'
-	}); 
- 
-var testMarkerOrange = L.AwesomeMarkers.icon({
-	icon: 'play',
-	markerColor: 'orange'
-	}); 
-	
-function loadMap() {	// Load the tiles
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',{
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +	
-			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'mapbox.streets'
-	}).addTo(mymap);
-}
-
-mymap.on('click', function(e) {
-	document.getElementById("lat").value = e.latlng.lat;
-	document.getElementById("lng").value = e.latlng.lng;
 });
 
-function resetForm() {
-	document.getElementById("location_name").value = "";
-	document.getElementById("question").value = "";
-	document.getElementById("answer_1").value = "";
-	document.getElementById("answer_2").value = "";
-	document.getElementById("answer_3").value = "";
-	document.getElementById("answer_4").value = "";
-	document.getElementById("lat").value = "";
-	document.getElementById("lng").value = "";
+	// create custom pink marker 
+	var testMarkerPink = L.AwesomeMarkers.icon({
+	icon: 'play',
+	markerColor: 'pink'
+});
+	// create the code to wait for the response from the data server, and process the response once it is received
+	
+	function earthquakeResponse() {
+	
+	// this function listens out for the server to say that the data is ready - i.e. has state 4
+	
+	if (client.readyState == 4) {
+	// once the data is ready, process the data
+	
+	var earthquakedata = client.responseText;
+	loadEarthquakelayer(earthquakedata);
+}
 }
 
-// Create a variable that will hold the XMLHttpRequest() 
-var client2;
+	// convert the received data - which is text - to JSON format and add it to the map
+	function loadEarthquakelayer(earthquakedata) {
 	
-// Create a variable that will hold the layer itself 
-var questionsLayer;
+	// convert the text to JSON
+	var earthquakejson = JSON.parse(earthquakedata);
+	
+	// load the geoJSON layer
+	var earthquakelayer = L.geoJson(earthquakejson,
+{
+	// use point to layer to create the points
+	pointToLayer: function (feature, latlng)
+{
+	// look at the GeoJSON file - specifically at the properties - to see the earthquake magnitude and use a different marker depending on this value
+	// also include a pop-up that shows the place value of the earthquakes
+	if (feature.properties.mag > 1.75) {
+	return L.marker(latlng, {icon:testMarkerRed}).bindPopup("<b>"+feature.properties.place +"</b>");
+}
+	else {
+	// magnitude is 1.75 or less
+	return L.marker(latlng, {icon:testMarkerPink}).bindPopup("<b>"+feature.properties.place +"</b>");;
+}
+},
+}).addTo(mymap);
+	
+	// change the map zoom so that all the data is shown
+	mymap.fitBounds(earthquakelayer.getBounds());
+}
 
-// create the code to get the question data using an XMLHttpRequest
-function getQuestions() {
+
+//adapted from: https://www.w3schools.com/html/html5_geolocation.asp
+//adapted from: https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
+//Tracking location
+
+
+var initialTracking = true;
+var userLocation;
+var autoPan = false;
+
+function trackLocation() {
+	if (!initialTracking){
+	// zoom to center
+		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
+		autoPan = true;
+		
+		
+	} else {
+		if (navigator.geolocation) {
+			alert("Finding your position!");
+			navigator.geolocation.watchPosition(showPosition);
+			
+			
+		//error handing	
+		} else {
+			alert("Geolocation is not supported by this browser.");
+		}
+	}
+}
+
+function showPosition(position) {
+
+	if(!initialTracking){
+		mymap.removeLayer(userLocation);
+	}
+	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);
+						
+	
+	
+	if(initialTracking){
+		initialTracking = false;
+		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
+		autoPan = true;
+	}else if (autoPan) {
+		mymap.panTo(userLocation.getLatLng());
+		
+	}	
+}
+
+
+
+
+
+
+qMarkers = [];
+
+
+
+
+
+
+
+
+
+	// create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable 
+	
+	var client2;
+	
+	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
+	
+	var questionsLayer;
+
+	// create the code to get the Earthquakes data using an XMLHttpRequest
+	function getQuestions() {
 	client2 = new XMLHttpRequest();
 	client2.open('GET','http://developer.cege.ucl.ac.uk:30289/getquestions');
 	client2.onreadystatechange = questionResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
 	client2.send();
 }
 
-// Receive the response from the data server, and process it
-function questionResponse() {
-	// Wait until data is ready - i.e. readyState is 4
+	// create custom red marker
+	var testMarkerRed = L.AwesomeMarkers.icon({
+	icon: 'play',
+	markerColor: 'red'
+});
+
+var testMarkerGreen = L.AwesomeMarkers.icon({
+	icon: 'play',
+	markerColor: 'green'
+});
+
+var testMarkerBlue = L.AwesomeMarkers.icon({
+	icon: 'play',
+	markerColor: 'blue'
+});
+
+var testMarkerOrange = L.AwesomeMarkers.icon({
+	icon: 'play',
+	markerColor: 'orange'
+});
+
+	// create the code to wait for the response from the data server, and process the response once it is received
+	
+	function questionResponse() {
+	
+	// this function listens out for the server to say that the data is ready - i.e. has state 4
+	
 	if (client2.readyState == 4) {
-		// once the data is ready, process the data
-		var questionData = client2.responseText;
-		loadQuestionLayer(questionData);
-	}
+	// once the data is ready, process the data
+	
+	var questionData = client2.responseText;
+	loadQuestionLayer(questionData);
+}
 }
 
-// Convert the received data - which is text - to JSON format and add it to the map
-function loadQuestionLayer(questionData) {
-	// Convert the text to JSON
+	// convert the received data - which is text - to JSON format and add it to the map
+	function loadQuestionLayer(questionData) {
+	
+	// convert the text to JSON
 	var questionJSON = JSON.parse(questionData);
-	// Load the geoJSON layer
+	
+	// load the geoJSON layer
 	var questionsLayer = L.geoJson(questionJSON,
-		{
-		// Use point to layer to create the points
-		pointToLayer: function (feature, latlng)
-		{
-			// also include a pop-up that shows the location name of the question
-			return L.marker(latlng, {icon:testMarkerOrange}).bindPopup("<b>"+feature.properties.location_name +"</b>" + "<p>" + feature.properties.question + "</b>");
-			},
-		}).addTo(mymap);
+{
+	// use point to layer to create the points
+	pointToLayer: function (feature, latlng)
+{
+	// look at the GeoJSON file - specifically at the properties - to see the earthquake magnitude and use a different marker depending on this value
+	// also include a pop-up that shows the place value of the earthquakes
+
+	layer_marker = L.marker(latlng, {icon:testMarkerOrange}) //
+	layer_marker.bindPopup("<b>"+feature.properties.location_name +"</b>");
+	
+	//return L.marker(latlng, {icon:markerOrange}).bindPopup("<b>"+feature.properties.location_name +"</b>" + "<p>" + feature.properties.question + "</b>");
+
+	qMarkers.push(layer_marker);
+	
+	
+},
+}).addTo(mymap);
+	
 	// change the map zoom so that all the data is shown
 	mymap.fitBounds(questionsLayer.getBounds());
 }
 
+
+function availableQuestions(){
+	checkQuestionDistance(qMarkers);
+}
+
+
+function checkQuestionDistance(questionMarkers){
+	
+	latlng = userLocation.getLatLng();
+	alert("Checking if you are within 20m of any question marker"); 
+	alert(latlng); 
+
+	for(var i=0; i<questionMarkers.length; i++) {
+	    currentMarker = questionMarkers[i];
+	    currentMarker_latlng = currentMarker.getLatLng();
+
+	    var distance = getDistanceFromLatLonInM(currentMarker_latlng.lat, currentMarker_latlng.lng, latlng.lat, latlng.lng);
+
+	    if (distance <= 20) {
+            questionMarkers[i].setIcon(testMarkerBlue);
+			questionMarkers[i].on('click', onClick);
+		
+        } else {
+        	questionMarkers[i].setIcon(testMarkerOrange);
+			questionMarkers[i].bindPopup("Get closer to the question to answer!");
+        }
+	}
+}	
 /*Adapted from:
 https://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript 
 &
