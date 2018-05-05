@@ -223,7 +223,7 @@ var testMarkerOrange = L.AwesomeMarkers.icon({
 
 	qMarkers.push(layer_marker);
 	
-	
+	return layer_marker;
 },
 }).addTo(mymap);
 	
