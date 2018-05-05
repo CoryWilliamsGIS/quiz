@@ -22,7 +22,10 @@ var mymap = L.map('mapid').fitWorld();
 	 mymap.locate({setView: true, maxZoom: 18});
 
 // Create global marker variables
-
+var testMarkerPink = L.AwesomeMarkers.icon({ 
+	icon: 'play',
+	markerColor: 'pink'
+	});
 
 var testMarkerRed = L.AwesomeMarkers.icon({ 
 	icon: 'play',
