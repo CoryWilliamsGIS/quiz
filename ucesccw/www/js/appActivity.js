@@ -41,8 +41,12 @@
 
 
 
-//adapted from: https://www.w3schools.com/html/html5_geolocation.asp
-//adapted from: https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
+/* Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
+&
+https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet */
+
+
+
 //Tracking location
 
 
@@ -236,6 +240,37 @@ function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+
+var clickedMarker;
+
+function onClick(e) {
+
+	alert(this.feature.properties.question);
+
+	showClickedQuestion(this);
+	clickedMarker = this;
+}
+
+
+function showClickedQuestion(clickedQuestion) {
+
+	document.getElementById('questionDiv').style.display = 'block';
+	document.getElementById('mapid').style.display = 'none';
+	document.getElementById("question").value = clickedQuestion.feature.properties.question;
+	document.getElementById("answer_1").value = clickedQuestion.feature.properties.answer_1;
+	document.getElementById("answer_2").value = clickedQuestion.feature.properties.answer_2;
+	document.getElementById("answer_3").value = clickedQuestion.feature.properties.answer_3;
+	document.getElementById("answer_4").value = clickedQuestion.feature.properties.answer_4;
+	
+	document.getElementById("check1").checked = false;
+	document.getElementById("check2").checked = false;
+	document.getElementById("check3").checked = false;
+	document.getElementById("check3").checked = false;
+	
+	clickedMarker = clickedQuestion;
+}
+
+
 
 
 

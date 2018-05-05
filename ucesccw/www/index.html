@@ -121,7 +121,25 @@ crossorigin=""></script>
 	 <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"> 
 		<div id="mapid" style="width: 100%; height: 100%;"></div> 
 
-		   
+    <div id="questionDiv" style ="display:none">
+        <h3 id = "questionHeader"> Please answer the question below:</h3>
+		
+		<textarea readonly id = "question" style="border: none; width:100%" ></textarea>
+
+        <textarea readonly id = "answer_1"></textarea>
+        <input type="radio" name="answer" id = check1 value="1" checked="yes" /><br />
+
+        <textarea readonly id = "answer_2"></textarea>
+        <input type="radio" name="answer" id = check2 value="2"/><br />
+
+        <textarea readonly id = "answer_3"></textarea>
+        <input type="radio" name="answer" id = check3 value="3"/><br />
+
+        <textarea readonly id = "answer_4"></textarea>
+        <input type="radio" name="answer" id = check4 value="4"/><br />
+
+        <button id="submitButton" onclick ="validateData()">Submit Answer</button></div>
+    </div>
 	
 </main>
 
