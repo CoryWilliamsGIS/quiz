@@ -74,7 +74,7 @@ function showPosition(position) {
 	}
 	var radius = 20; //!!!!!!!!!
 	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);		
-	userLocation = L.marker([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);			//!!!!!!!!!!!!!			
+	userLocation = L.circle([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);			//!!!!!!!!!!!!!			
 	if(initialTracking){
 		initialTracking = false;
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
