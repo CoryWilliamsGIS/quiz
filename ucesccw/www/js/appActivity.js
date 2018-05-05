@@ -4,7 +4,7 @@
 
 var client;
 
-var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+var mymap = L.map('mapid').fitWorld();
 
 // Create global marker variables
 
