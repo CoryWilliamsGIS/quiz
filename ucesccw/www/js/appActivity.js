@@ -1,10 +1,26 @@
 // Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
 
-// Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
 
-var client;
+
 
 var mymap = L.map('mapid').fitWorld();
+
+
+    var mymap = L.map('mapid').fitWorld();
+
+    // load the tiles
+
+    L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
+
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+
+      maxZoom: 18,
+
+      id: 'mapbox.streets'
+	  
+	 }).addTo(mymap);
+	 
+	 mymap.locate({setView: true, maxZoom: 18});
 
 // Create global marker variables
 
@@ -30,17 +46,9 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	markerColor: 'blue'
 });
 	
-function loadMap() {	// Load the tiles
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',{
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +	
-			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'mapbox.streets'
-	}).addTo(mymap);
-}
+
    
-	
+var client;	
 
 
 
