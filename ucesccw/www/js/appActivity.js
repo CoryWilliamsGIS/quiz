@@ -241,7 +241,7 @@ function checkQuestionDistance(questionMarkers){
 	
 	latlng = userLocation.getLatLng();
 	alert("Checking if you are within 20m of any question marker"); 
-	alert(latlng); 
+ 
 
 	for(var i=0; i<questionMarkers.length; i++) {
 	    currentMarker = questionMarkers[i];
@@ -288,7 +288,7 @@ var clickedMarker;
 
 function onClick(e) {
 
-	alert(this.feature.properties.question);
+	
 
 	showClickedQuestion(this);
 	clickedMarker = this;
