@@ -37,7 +37,7 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	markerColor: 'blue'
 });
 	
-var client;	
+//var client;	
 
 /* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
 &
@@ -132,10 +132,10 @@ function loadQuestionLayer(questionData) {
 	mymap.fitBounds(questionsLayer.getBounds());
 }
 
-+/*Adapted from:
-+https://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript 
-+&
-+https://www.geodatasource.com/developers/javascript */
+/*Adapted from:
+https://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript 
+&
+https://www.geodatasource.com/developers/javascript */
 function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
