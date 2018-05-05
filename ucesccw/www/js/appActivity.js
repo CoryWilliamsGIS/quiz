@@ -2,9 +2,7 @@
 
 var mymap = L.map('mapid').fitWorld();
 
-
-
-    // load the tiles
+// load the map tiles
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	maxZoom: 18,
@@ -39,7 +37,7 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 	markerColor: 'blue'
 });
 	
-var client;	
+//var client;	- test
 
 /* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
 &
@@ -140,23 +138,22 @@ function availableQuestions(){
 }
 
 // Determine the users distance from each question marker 
-// If user within 20m of question marker, make it blue
 function checkQuestionDistance(questionMarkers){
-	
+	// Get users current location
 	latlng = userLocation.getLatLng();
 	alert("Checking if you are within 20m of any question marker"); 
- 
-
+	/* Iterate through each question to determine if any are within 
+	20m of the users location */
 	for(var i=0; i<questionMarkers.length; i++) {
 	    currentMarker = questionMarkers[i];
 	    currentMarker_latlng = currentMarker.getLatLng();
-
+		// Assign to the distance variable
 	    var distance = getDistanceFromLatLonInM(currentMarker_latlng.lat, currentMarker_latlng.lng, latlng.lat, latlng.lng);
-
+		// Make marker blue if question within 20m and allow the user to answer
 	    if (distance <= 20) {
             questionMarkers[i].setIcon(testMarkerBlue);
 			questionMarkers[i].on('click', onClick);
-		
+		// Keep marker orange if not within 20m and do not allow question to be answered
         } else {
         	questionMarkers[i].setIcon(testMarkerOrange);
 			questionMarkers[i].bindPopup("Get closer to the question to answer!");
@@ -164,9 +161,10 @@ function checkQuestionDistance(questionMarkers){
 	}
 }	
 
-	
-
-
++/*Adapted from:
++https://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript 
++&
++https://www.geodatasource.com/developers/javascript */
 function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -186,71 +184,65 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-
-
+// Create a global variable for the clicked marker
 var clickedMarker;
 
+
 function onClick(e) {
-
-	
-
 	showClickedQuestion(this);
 	clickedMarker = this;
 }
 
 
 function showClickedQuestion(clickedQuestion) {
-
+	// AJAX alternative
+	// Replace leaflet map div with div holding the question 
 	document.getElementById('questionDiv').style.display = 'block';
 	document.getElementById('mapid').style.display = 'none';
-//CHANGING THIS FROM clickedQuestion to clickedMarker -trial to fix error
+	// Retrieve the relevant information
 	document.getElementById("question").value = clickedQuestion.feature.properties.question;
 	document.getElementById("answer_1").value = clickedQuestion.feature.properties.answer_1;
 	document.getElementById("answer_2").value = clickedQuestion.feature.properties.answer_2;
 	document.getElementById("answer_3").value = clickedQuestion.feature.properties.answer_3;
 	document.getElementById("answer_4").value = clickedQuestion.feature.properties.answer_4;
-	
+	/*Create the way the user will answer the question
+	Make all buttons unchecked initially */
 	document.getElementById("check1").checked = false;
 	document.getElementById("check2").checked = false;
 	document.getElementById("check3").checked = false;
 	document.getElementById("check3").checked = false;
-	
 	clickedMarker = clickedQuestion;
 }
 
-
-
-
+// Error handing - ensure a radio button is ticked
 function validateData() {
         var a=document.getElementById("check1").checked;
         var b=document.getElementById("check2").checked;
         var c=document.getElementById("check3").checked;
         var d=document.getElementById("check4").checked; 
-
         if (a==false && b==false && c==false && d==false)
         {
             alert("Please fill in all fields.");
-           return false;
+			return false;
         }
         else 
-
-        {
-	              
+        {        
         	startDataUpload()
         }
 }
 
+// Variable used to determine if user answer is correct
 var answerTrue;
 
 function startDataUpload() {
 	alert ("Submitting your answer!");
+	// Assign the question's correct answer
 	var cAnswer = clickedMarker.feature.properties.answer_correct;
+	// Assign the question
 	var question = document.getElementById("question").value;
-
-
-
-
+	// Variable used to assign the users answer
 	var answer;
+	// Variable used in uploading the relevant information to the app_answers database table
 	var postString = "question="+question; 
 
 	// now get the radio button values
@@ -270,6 +262,7 @@ function startDataUpload() {
 		answer =4;
 		postString=postString+"&answer="+answer;
 	}
+	//Determine if the user got the question correct
 	if (answer == cAnswer) {
 		alert("Correct!");
 		answerTrue = true;
@@ -277,15 +270,14 @@ function startDataUpload() {
 		alert("Sorry, that is incorrect! \n The correct answer is: " + cAnswer);
 		answerTrue = false;
 	}
-		
 	postString = postString + "&cAnswer="+cAnswer;
-
-
 	processData(postString);
 }
 
-var client;
+// Create a variable that will hold the XMLHttpRequest()
+var client; 
 
+// create the code to upload the question data using an XMLHttpRequest
 function processData(postString) {
    client = new XMLHttpRequest();
    client.open('POST','http://developer.cege.ucl.ac.uk:30289/uploadAnswer',true);
@@ -294,15 +286,18 @@ function processData(postString) {
    client.send(postString);
 }
 
-// create the code to wait for the response from the data server, and process the response once it is received
+// Receive the response from the data server and process it
 function answerUploaded() {
-  // this function listens out for the server to say that the data is ready - i.e. has state 4
+  // Wait until data is ready - i.e. readyState is 4
   if (client.readyState == 4) {
-    // change the DIV to show the response
-
+    // Once the data is ready, process the data
+	
+	// AJAX Alternative 
+	// Switch the div back to leaflet map
 	document.getElementById('questionDiv').style.display = 'none';
 	document.getElementById('mapid').style.display = 'block';
-	
+	/* If user answer is correct - make question marker green,
+	if user answer incorrect - make question marker red */
 	if (answerTrue) {
 		clickedMarker.setIcon(testMarkerGreen);
 	} else {
