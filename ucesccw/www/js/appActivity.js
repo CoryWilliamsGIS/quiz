@@ -344,6 +344,6 @@ function answerUploaded() {
  //   document.getElementById("answerUploadResult").innerHTML = client.responseText;
 	document.getElementById('questionDiv').style.display = 'none';
 	document.getElementById('mapid').style.display = 'block';
- 
+  }
 
 
