@@ -1,25 +1,17 @@
 // Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
 
-
-
-
 var mymap = L.map('mapid').fitWorld();
 
 
 
     // load the tiles
-
-    L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
-
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-
-      maxZoom: 18,
-
-      id: 'mapbox.streets'
-	  
-	 }).addTo(mymap);
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw", {
+	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+	maxZoom: 18,
+	id: 'mapbox.streets'
+}).addTo(mymap);
 	 
-	 mymap.locate({setView: true, maxZoom: 18});
+mymap.locate({setView: true, maxZoom: 18});
 
 // Create global marker variables
 var testMarkerPink = L.AwesomeMarkers.icon({ 
@@ -41,57 +33,46 @@ var testMarkerOrange = L.AwesomeMarkers.icon({
 	icon: 'play',
 	markerColor: 'orange'
 	}); 
-	
 
 var testMarkerBlue = L.AwesomeMarkers.icon({
 	icon: 'play',
 	markerColor: 'blue'
 });
 	
-
-   
 var client;	
-
-
-
 
 /* Code Adapted from: https://www.w3schools.com/html/html5_geolocation.asp
 &
-https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
-*/
+https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet */
 
-// Track location
+// Track the location of the user
 var initialTracking = true;
 var userLocation;
 var autoPan = false;
 
 function trackLocation() {
 	if (!initialTracking){
-	// zoom to center
+		// Zoom to center
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
 		autoPan = true;
-		
-		
 	} else {
 		if (navigator.geolocation) {
 			alert("Finding your position!");
 			navigator.geolocation.watchPosition(showPosition);
-			
-			
-		//error handing	
+		//Error handing	
 		} else {
 			alert("Geolocation is not supported by this browser.");
 		}
 	}
 }
 
+// Display user position as pink marker
+// Center map on user
 function showPosition(position) {
-
 	if(!initialTracking){
 		mymap.removeLayer(userLocation);
 	}
-	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);
-							
+	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);						
 	if(initialTracking){
 		initialTracking = false;
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
@@ -103,30 +84,19 @@ function showPosition(position) {
 
 qMarkers = [];
 
-
-
-
-
-
-
-
-
- 
 // Create a variable that will hold the XMLHttpRequest()	
 var client2;
 	
-
 // Create a variable that will hold the layer itself 	
 var questionsLayer;
 
-// create the code to get the question data using an XMLHttpRequest
+// Create the code to get the question data using an XMLHttpRequest
 function getQuestions() {
 	client2 = new XMLHttpRequest();
 	client2.open('GET','http://developer.cege.ucl.ac.uk:30289/getquestions');
 	client2.onreadystatechange = questionResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
 	client2.send();
 }
-
 
 // Receive the response from the data server and process it	
 function questionResponse() {
@@ -164,12 +134,13 @@ function loadQuestionLayer(questionData) {
 	mymap.fitBounds(questionsLayer.getBounds());
 }
 
-
+// Function activated by pressing navigation link 'Answer Questions' in app menu
 function availableQuestions(){
 	checkQuestionDistance(qMarkers);
 }
 
-
+// Determine the users distance from each question marker 
+// If user within 20m of question marker, make it blue
 function checkQuestionDistance(questionMarkers){
 	
 	latlng = userLocation.getLatLng();
@@ -270,21 +241,13 @@ function validateData() {
 }
 
 var answerTrue;
+
 function startDataUpload() {
 	alert ("Submitting your answer!");
-
-//	var location_name = document.getElementById("location_name").value;
-
 	var cAnswer = clickedMarker.feature.properties.answer_correct;
 	var question = document.getElementById("question").value;
 
-//	var answer_1 = document.getElementById("answer_1").value;
-//	var answer_2 = document.getElementById("answer_2").value;
-//	var answer_3 = document.getElementById("answer_3").value;
-//	var answer_4 = document.getElementById("answer_4").value;
 
-//	var lat = document.getElementById("lat").value;
-//	var lng = document.getElementById("lng").value;
 
 
 	var answer;
