@@ -76,7 +76,7 @@ function showPosition(position) {
 	}
 	var radius = 20; 
 	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);		
-	userLocationRadius = L.circle([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);			//!!!!!!!!!!!!!			
+	userLocationRadius = L.circle([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);					
 	if(initialTracking){
 		initialTracking = false;
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
@@ -170,7 +170,7 @@ function availableQuestions(){
 function checkQuestionDistance(questionMarkers){
 	// Get users current location
 	latlng = userLocation.getLatLng();
-	alert("Checking if you are within 20m of any question marker"); 
+	alert("Checking if you are within 20m of any question"); 
 	/* Iterate through each question to determine if any are within 
 	20m of the users location */
 	for(var i=0; i<questionMarkers.length; i++) {
@@ -226,7 +226,7 @@ function validateData() {
         var d=document.getElementById("check4").checked; 
         if (a==false && b==false && c==false && d==false)
         {
-            alert("Please fill in all fields.");
+            alert("Please select an answer.");
 			return false;
         }
         else 
@@ -271,7 +271,7 @@ function startDataUpload() {
 		alert("Correct!");
 		answerTrue = true;
 	} else {
-		alert("Sorry, that is incorrect! \n The correct answer is: " + cAnswer);
+		alert("Sorry, your answer of " +answer+" is incorrect! \n The correct answer is: " + cAnswer);
 		answerTrue = false;
 	}
 	postString = postString + "&cAnswer="+cAnswer;
