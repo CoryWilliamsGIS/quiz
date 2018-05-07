@@ -1,4 +1,6 @@
-// Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
+/* Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
+&
+https://github.com/claireellul/cegeg077-week6formcode */
 
 // Assigns leaflet map 
 var mymap = L.map('mapid').fitWorld();
@@ -42,25 +44,26 @@ var testMarkerBlue = L.AwesomeMarkers.icon({
 
 /* Code Adapted from:
 https://www.w3schools.com/html/html5_geolocation.asp
-https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet
+&
 https://gis.stackexchange.com/questions/182068/getting-current-user-location-automatically-every-x-seconds-to-put-on-leaflet */
 
-// Track the location of the user
+// Variables used in location tracking 
 var initialTracking = true;
 var userLocation;
-var userLocationRadius; 
+var userLocationRadius; // variable for adding circle around the user 
 var autoPan = false;
 
+// track the location of the user using GPS,pan to their location and update if the user moves
 function trackLocation() {
 	if (!initialTracking){
-		// Zoom to center
+		// Center on the location of the user
 		mymap.fitBounds(userLocation.getLatLng().toBounds(250));
 		autoPan = true;
 	} else {
 		if (navigator.geolocation) {
 			alert("Finding your position!");
 			navigator.geolocation.watchPosition(showPosition);
-		//Error handing	
+		//Handling errors if GPS fix cannot be obtained
 		} else {
 			alert("Geolocation is not supported by this browser.");
 		}
@@ -75,8 +78,11 @@ function showPosition(position) {
 		mymap.removeLayer(userLocation);
 		mymap.removeLayer(userLocationRadius); 
 	}
+	// Circle radius 
 	var radius = 20; 
-	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);		
+	// Add user's current location to Leaflet map as pink marker
+	userLocation = L.marker([position.coords.latitude,position.coords.longitude], {icon:testMarkerPink}).addTo(mymap);	
+	// Add a circle with a radius of 20m around the user's current location on the Leaflet map
 	userLocationRadius = L.circle([position.coords.latitude,position.coords.longitude], radius).addTo(mymap);					
 	if(initialTracking){
 		initialTracking = false;
@@ -90,13 +96,13 @@ function showPosition(position) {
 // Empty array which will be used to store question point markers 
 qMarkers = [];
 
-// Create a variable that will hold the XMLHttpRequest()	
+// Variable that will hold the XMLHttpRequest()	
 var client2;
 	
-// Create a variable that will hold the layer itself 	
+// Variable that will be used to store the points	
 var questionPoints;
 
-// Create the code to get the question data using an XMLHttpRequest
+// create the code to get the question data using an XMLHttpRequest
 function getQuestions() {
 	client2 = new XMLHttpRequest();
 	client2.open('GET','http://developer.cege.ucl.ac.uk:30289/getquestions');
@@ -104,7 +110,7 @@ function getQuestions() {
 	client2.send();
 }
 
-// Receive the response from the data server and process it	
+// Receive the response from the data server, and process it
 function questionResponse() {
 	// Wait until data is ready - i.e. readyState is 4
 	if (client2.readyState == 4) {
@@ -114,19 +120,19 @@ function questionResponse() {
 	}
 }
 
-// Convert the received data - which is text - to JSON format and add it to the map
+// Convert the received data from text to JSON and add it to the Leaflet map
 function loadQuestionPoints(qData) {
-	// Convert the text to JSON
+	// Convert text to JSON
 	var questionJSON = JSON.parse(qData);
-	// Load the geoJSON layer
+	// Load question points as GeoJSON
 	var questionPoints = L.geoJson(questionJSON,
 	{
-	// Use point to layer to create the points
+	// Use point to layer to create the question points
 	pointToLayer: function (feature, latlng)
 	{
 		//Create orange marker for each question in the database
 		pointMarker = L.marker(latlng, {icon:testMarkerOrange}) 
-		//Add a popup with the location name property of that question
+		//Add a pop up to the marker with the location name property of that question
 		pointMarker.bindPopup("<b>"+feature.properties.location_name +"</b>");
 	
 		//Push the markers to the qMarkers array
@@ -136,7 +142,7 @@ function loadQuestionPoints(qData) {
 	},
 	}).addTo(mymap);
 	
-	// change the map zoom so that all the data is shown
+	// Change the map zoom so that all questions are visible
 	mymap.fitBounds(questionPoints.getBounds());
 }
 
@@ -192,7 +198,7 @@ function checkQuestionDistance(questionMarkers){
 	}
 }	
 
-// Create a global variable for the clicked marker
+// Global variable for the clicked marker
 var mClicked;
 
 // The marker clicked on the leaflet map is assigned and the qClicked function initiated 
@@ -221,7 +227,7 @@ function qClicked(clickedQuestion) {
 	mClicked = clickedQuestion;
 }
 
-// Error handing - ensure a radio button is ticked
+// Error handing - ensure a radio button is checked
 function validateUserAnswer() {
         var c1=document.getElementById("radioCheck1").checked;
         var c2=document.getElementById("radioCheck2").checked;
@@ -241,6 +247,7 @@ function validateUserAnswer() {
 // Variable used to determine if user answer is correct
 var answerTrue;
 
+// Submit answer to the database 
 function uploadAnswer() {
 	alert ("Submitting your answer!");
 	// Assign the question's correct answer
@@ -269,7 +276,7 @@ function uploadAnswer() {
 		answer =4;
 		postString=postString+"&answer="+answer;
 	}
-	//Determine if the user got the question correct
+	//Determine if the user got the question correct and alert them appropriately
 	if (answer == cAnswer) {
 		alert("Correct!");
 		answerTrue = true;
@@ -284,7 +291,7 @@ function uploadAnswer() {
 // Variable that will hold the XMLHttpRequest()
 var client; 
 
-// create the code to upload the question data using an XMLHttpRequest
+// Uploads answer data in postString variable to the database using XMLHttpRequest(
 function processAnswer(postString) {
    client = new XMLHttpRequest();
    client.open('POST','http://developer.cege.ucl.ac.uk:30289/uploadAnswer',true);
