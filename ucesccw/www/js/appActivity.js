@@ -214,10 +214,10 @@ function qClicked(clickedQuestion) {
 	document.getElementById("answer_4").value = clickedQuestion.feature.properties.answer_4;
 	/*Create the way the user will answer the question
 	Make all buttons unchecked initially */
-	document.getElementById("check1").checked = false;
-	document.getElementById("check2").checked = false;
-	document.getElementById("check3").checked = false;
-	document.getElementById("check3").checked = false;
+	document.getElementById("radioCheck1").checked = false;
+	document.getElementById("radioCheck2").checked = false;
+	document.getElementById("radioCheck3").checked = false;
+	document.getElementById("radioCheck4").checked = false;
 	mClicked = clickedQuestion;
 }
 
