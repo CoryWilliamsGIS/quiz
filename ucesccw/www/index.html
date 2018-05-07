@@ -2,13 +2,10 @@
 <!--
   Material Design Lite
   Copyright 2015 Google Inc. All rights reserved.
-
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-
       https://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -86,7 +83,7 @@
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
           <a class="mdl-navigation__link" href=""onclick='trackLocation();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">flag</i>Track Location</a>
 		     <a class="mdl-navigation__link" href=""onclick='getQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Find Questions</a>
-          <a class="mdl-navigation__link" href=""onclick='availableQuestions();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Answer Questions</a>
+          <a class="mdl-navigation__link" href=""onclick='validateUserAnswer();return false;'><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Answer Questions</a>
         </nav>
       </div>
 	  
@@ -101,18 +98,18 @@
 		<textarea readonly id = "question" style="border: none; width:100%" ></textarea>
 
         <textarea readonly id = "answer_1"></textarea>
-        <input type="radio" name="answer" id = check1 value="1" checked="yes" /><br />
+        <input type="radio" name="answer" id = radioCheck1 value="1" checked="yes" /><br />
 
         <textarea readonly id = "answer_2"></textarea>
-        <input type="radio" name="answer" id = check2 value="2"/><br />
+        <input type="radio" name="answer" id = radioCheck2 value="2"/><br />
 
         <textarea readonly id = "answer_3"></textarea>
-        <input type="radio" name="answer" id = check3 value="3"/><br />
+        <input type="radio" name="answer" id = radioCheck3 value="3"/><br />
 
         <textarea readonly id = "answer_4"></textarea>
-        <input type="radio" name="answer" id = check4 value="4"/><br />
+        <input type="radio" name="answer" id = radioCheck4 value="4"/><br />
 
-        <button id="submitButton" onclick ="validateData()">Submit Answer</button></div>
+        <button id="submitButton" onclick ="validateUserAnswer()">Submit Answer</button></div>
     </div>
 	</main>
 

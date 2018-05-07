@@ -1,5 +1,6 @@
 // Code adapted from: https://github.com/claireellul/cegeg077-week5app/blob/master/ucfscde/www/js/appActivity.js
 
+// Assigns leaflet map 
 var mymap = L.map('mapid').fitWorld();
 
 // load the map tiles
@@ -66,9 +67,9 @@ function trackLocation() {
 	}
 }
 
-// Display user position as pink marker
-// Display a 20m circle around the pink marker
-// Center map on user
+/* 	Display user position as pink marker
+	Display a 20m circle around the pink marker
+	Center map on user */
 function showPosition(position) {
 	if(!initialTracking){
 		mymap.removeLayer(userLocation);
@@ -86,19 +87,20 @@ function showPosition(position) {
 	}	
 }
 
+// Empty array which will be used to store question point markers 
 qMarkers = [];
 
 // Create a variable that will hold the XMLHttpRequest()	
 var client2;
 	
 // Create a variable that will hold the layer itself 	
-var questionsLayer;
+var questionPoints;
 
 // Create the code to get the question data using an XMLHttpRequest
 function getQuestions() {
 	client2 = new XMLHttpRequest();
 	client2.open('GET','http://developer.cege.ucl.ac.uk:30289/getquestions');
-	client2.onreadystatechange = questionResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+	client2.onreadystatechange = questionResponse; 
 	client2.send();
 }
 
@@ -107,35 +109,35 @@ function questionResponse() {
 	// Wait until data is ready - i.e. readyState is 4
 	if (client2.readyState == 4) {
 		// once the data is ready, process the data
-		var questionData = client2.responseText;
-		loadQuestionLayer(questionData);
+		var qData = client2.responseText;
+		loadQuestionPoints(qData);
 	}
 }
 
 // Convert the received data - which is text - to JSON format and add it to the map
-function loadQuestionLayer(questionData) {
+function loadQuestionPoints(qData) {
 	// Convert the text to JSON
-	var questionJSON = JSON.parse(questionData);
+	var questionJSON = JSON.parse(qData);
 	// Load the geoJSON layer
-	var questionsLayer = L.geoJson(questionJSON,
+	var questionPoints = L.geoJson(questionJSON,
 	{
 	// Use point to layer to create the points
 	pointToLayer: function (feature, latlng)
 	{
 		//Create orange marker for each question in the database
-		layer_marker = L.marker(latlng, {icon:testMarkerOrange}) 
+		pointMarker = L.marker(latlng, {icon:testMarkerOrange}) 
 		//Add a popup with the location name property of that question
-		layer_marker.bindPopup("<b>"+feature.properties.location_name +"</b>");
+		pointMarker.bindPopup("<b>"+feature.properties.location_name +"</b>");
 	
 		//Push the markers to the qMarkers array
-		qMarkers.push(layer_marker);
+		qMarkers.push(pointMarker);
 	
-		return layer_marker;
+		return pointMarker;
 	},
 	}).addTo(mymap);
 	
 	// change the map zoom so that all the data is shown
-	mymap.fitBounds(questionsLayer.getBounds());
+	mymap.fitBounds(questionPoints.getBounds());
 }
 
 /*Adapted from:
@@ -162,7 +164,7 @@ function deg2rad(deg) {
 }
 
 // Function activated by pressing navigation link 'Answer Questions' in app menu
-function availableQuestions(){
+function closeDistanceQuestions(){
 	checkQuestionDistance(qMarkers);
 }
 
@@ -191,14 +193,15 @@ function checkQuestionDistance(questionMarkers){
 }	
 
 // Create a global variable for the clicked marker
-var clickedMarker;
+var mClicked;
 
+// The marker clicked on the leaflet map is assigned and the qClicked function initiated 
 function onClick(e) {
-	showClickedQuestion(this);
-	clickedMarker = this;
+	qClicked(this);
+	mClicked = this;
 }
 
-function showClickedQuestion(clickedQuestion) {
+function qClicked(clickedQuestion) {
 	// AJAX alternative
 	// Replace leaflet map div with div holding the question 
 	document.getElementById('questionDiv').style.display = 'block';
@@ -215,33 +218,33 @@ function showClickedQuestion(clickedQuestion) {
 	document.getElementById("check2").checked = false;
 	document.getElementById("check3").checked = false;
 	document.getElementById("check3").checked = false;
-	clickedMarker = clickedQuestion;
+	mClicked = clickedQuestion;
 }
 
 // Error handing - ensure a radio button is ticked
-function validateData() {
-        var a=document.getElementById("check1").checked;
-        var b=document.getElementById("check2").checked;
-        var c=document.getElementById("check3").checked;
-        var d=document.getElementById("check4").checked; 
-        if (a==false && b==false && c==false && d==false)
+function validateUserAnswer() {
+        var c1=document.getElementById("radioCheck1").checked;
+        var c2=document.getElementById("radioCheck2").checked;
+        var c3=document.getElementById("radioCheck3").checked;
+        var c4=document.getElementById("radioCheck4").checked; 
+        if (c1==false && c2==false && c3==false && c4==false)
         {
             alert("Please select an answer.");
 			return false;
         }
         else 
         {        
-        	startDataUpload()
+        	uploadAnswer()
         }
 }
 
 // Variable used to determine if user answer is correct
 var answerTrue;
 
-function startDataUpload() {
+function uploadAnswer() {
 	alert ("Submitting your answer!");
 	// Assign the question's correct answer
-	var cAnswer = clickedMarker.feature.properties.answer_correct;
+	var cAnswer = mClicked.feature.properties.answer_correct;
 	// Assign the question
 	var question = document.getElementById("question").value;
 	// Variable used to assign the users answer
@@ -275,14 +278,14 @@ function startDataUpload() {
 		answerTrue = false;
 	}
 	postString = postString + "&cAnswer="+cAnswer;
-	processData(postString);
+	processAnswer(postString);
 }
 
-// Create a variable that will hold the XMLHttpRequest()
+// Variable that will hold the XMLHttpRequest()
 var client; 
 
 // create the code to upload the question data using an XMLHttpRequest
-function processData(postString) {
+function processAnswer(postString) {
    client = new XMLHttpRequest();
    client.open('POST','http://developer.cege.ucl.ac.uk:30289/uploadAnswer',true);
    client.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -302,12 +305,10 @@ function answerUploaded() {
 		/* If user answer is correct - make question marker green,
 		if user answer incorrect - make question marker red */
 		if (answerTrue) {
-			clickedMarker.setIcon(testMarkerGreen);
+			mClicked.setIcon(testMarkerGreen);
 		} else {
-			clickedMarker.setIcon(testMarkerRed);
+			mClicked.setIcon(testMarkerRed);
 		}
     }
 }
-
-
 
