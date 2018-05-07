@@ -253,19 +253,19 @@ function uploadAnswer() {
 	var postString = "question="+question; 
 
 	// now get the radio button values
-	if (document.getElementById("check1").checked) {
+	if (document.getElementById("radioCheck1").checked) {
 		answer = 1;
         postString=postString+"&answer="+answer;
     }
-    if (document.getElementById("check2").checked) {
+    if (document.getElementById("radioCheck2").checked) {
 		answer = 2;
     	postString=postString+"&answer="+answer;
     }
-	if (document.getElementById("check3").checked) {
+	if (document.getElementById("radioCheck3").checked) {
 		answer =3;
 		postString=postString+"&answer="+answer;
 	}
-	if (document.getElementById("check4").checked) {
+	if (document.getElementById("radioCheck4").checked) {
 		answer =4;
 		postString=postString+"&answer="+answer;
 	}
