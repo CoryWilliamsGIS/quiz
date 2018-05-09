@@ -8,7 +8,7 @@ The application is intended for use by the end user to play their way through a 
 
 # User Guide
 The user guide for the mobile application has recently been uploaded to this repository. It was initially intended for this to be accessible within the mobile application itself (similar to the web application). Unfortunately, this was not achieved. 
-Instead, the user guide file can be viewed as intended ‘**[questions](https://rawgit.com/CoryWilliamsGIS/quiz/master/ucesccw/www/Mobile_User_Guide.html)**’
+Instead, the user guide file can be viewed as intended **[here](https://rawgit.com/CoryWilliamsGIS/quiz/master/ucesccw/www/Mobile_User_Guide.html)**
  
 
 # Demo
