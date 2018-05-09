@@ -165,6 +165,7 @@ function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
   return d2;
 }
 
+// Converts degrees to Radians
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
