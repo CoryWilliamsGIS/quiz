@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+
+<head>
+<title>Mobile Application User Guide</title>
+
+<h1> Mobile Application User Guide </h1>
+</head>
+
+<body>
+<h2>Starting the Application: </h2>
+
+<text area>
+
+•	Upon opening the Quiz App you are presented with a map of the world.
+<p>
+•	Shortly after, the map will automatically pan to your relative location.
+<p>
+<p>
+<h2>Location Tracking: </h2>
+<p>
+•	Open the menu by clicking the top left button, next to the word 'Quiz' and click the 'Track Location' button to show the location of the user as a pink marker. The marker will update periodically if the user moves location. A blue circle also surrounds the user's location, representing 20m from the current user's location.
+<p> 
+•	Please note that the application may struggle to locate you if you are indoors or surrounded by tall buildings. If you clicked the 'Track Location' button and your location is not displayed as above, you will need to go outside or to a more open location to obtain a GPS fix.
+<p>
+<p>
+•	Click 'Find Questions' in the Menu to present all questions set using the Associated Web Application as orange markers.
+<p>
+•	The user should navigate themselves to the question. The question must be within 20m of the user's location to be answered. The blue circle around the user's location can be used to determine if a question is within the required distance.
+<p>
+<p>
+<h2>Locating Questions to Answer: </h2>
+<p>
+•	Click 'Answer Questions' from the menu. The user is then alerted that the application is checking if they are within 20m of any question.
+<p>
+•	Questions which are within 20m are displayed as blue markers. Questions which are too far away remain orange. 
+<p>
+<p>
+<h2>Answering Questions: </h2>
+<p>
+•	To answer a question, the marker must be blue (within 20m). 
+<p>
+•	If the user clicks an orange marker to answer a question which is more than 20m away, a popup is displayed prompting to get closer to the marker. 
+<p>
+•	Clicking a blue marker will load a question and four possible answers onto the screen.
+<p>
+•	To answer the question, press the radio button next to your choice, followed by the 'Submit Answer' button.
+<p>
+•	An answer must be selected. If the user attempts to submit an answer without clicking one of the radio buttons, an alert is produced, prompting the user to select an answer.
+<p>
+•	Once a radio button is checked and the 'Submit Answer' button pressed, the user is informed their answer is being submitted to the database and if their selection is correct. If incorrect, they are informed of the correct answer.
+<p>
+•	The map display returns. The answered question marker is now green if the user answered correctly.
+<p>
+•	Conversely, if the user answered incorrectly, the question marker now appears red.
+<p>
+<p>
+<h2>Additional Notes: </h2>
+<p>
+<p>
+•	If the user clicks the 'Show Questions' button and no orange markers are loaded on the map, it can be for two reasons:
+<p>
+1 - There are not any questions in the database to add to the map.
+<p>
+2 - The httpServer is not running.
+<p>
+•	If any of the above occur, cancel and restart each server and the web application should work as expected.
+<p>
+•	If the user clicks the 'Answer Questions' button and no blue markers are location on the map, it can be for two reasons:
+<p>
+1 - There are no question markers within 20m. Use the blue circle around the user’s location to judge this.
+<p>
+2 - The httpServer is not running. Restart the server.
+<p>
+•	The question marker colours do not change dynamically. Therefore, every time the user moves within 20m of another question marker (as defined by the circle), they must click the 'Answer Questions' menu button to load it as a blue, answerable question marker.
+<p>
+•	The user should pay extra attention not to click the 'Find Questions' menu button more than once per session. Doing so duplicates the points on the map which can interfere with the symbology of the interface. If the user does accidentally do this, completely close the app and re-open it.
+</text area>
+
+</body>
+</html>
